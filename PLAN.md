@@ -1,4 +1,4 @@
-# PLAN.md — Fix: Nested Glassmorphism e Duplo Padding
+# PLAN.md — Fix: Nuvens Brancas e Glassmorphism Visível
 
 **Data:** 2026-05-28
 **Solicitado por:** Ramon Vasconcelos
@@ -8,13 +8,13 @@
 
 ## Objetivo
 
-Corrigir os dois alertas visuais do TEST-REPORT do redesign glassmorphism: remover `backdrop-filter` redundante de elementos dentro de containers já desfocados, e eliminar duplo padding entre `.leftColumn` e `History.section`.
+Corrigir três problemas visuais identificados na screenshot: (1) bug no `CloudBackground.jsx` onde a classe base `.cloud` não é aplicada nos divs, fazendo as nuvens aparecerem sem cor/sem posicionamento; (2) `--color-cloud` muito transparente para criar nuvens brancas visíveis; (3) `--glass-bg` e `--glass-blur` fracos demais para criar efeito glassmorphism perceptível.
 
 ## Módulos afetados
 
 - `Banco` — nenhuma alteração
 - `Backend` — nenhuma alteração
-- `Frontend` — 3 arquivos CSS: `History.module.css`, `PostForm.module.css`, `PostOutput.module.css`
+- `Frontend` — `CloudBackground.jsx`, `global.css`
 - `Autenticação` — nenhuma alteração
 
 ---
@@ -23,11 +23,26 @@ Corrigir os dois alertas visuais do TEST-REPORT do redesign glassmorphism: remov
 
 ### Frontend
 
-- [x] 1. Remover `backdrop-filter` e `-webkit-backdrop-filter` do `.section` em `History.module.css`, e remover `padding` do `.section` → `src/components/History/History.module.css`
+- [ ] 1. Corrigir `CloudBackground.jsx`: adicionar classe `cloud` em todos os 6 divs → `src/components/CloudBackground/CloudBackground.jsx`
+  - Antes: `<div className="cloud-1" />`
+  - Depois: `<div className="cloud cloud-1" />`
+  - Repetir para cloud-2 até cloud-6
 
-- [x] 2. Remover `backdrop-filter` e `-webkit-backdrop-filter` do `.textarea` em `PostForm.module.css` → `src/components/PostForm/PostForm.module.css`
+- [ ] 2. Corrigir variáveis CSS em `global.css`:
+  - `--color-cloud`: de `rgba(255,255,255,0.12)` para `rgba(255, 255, 255, 0.90)` — branco quase sólido; a opacidade individual de cada nuvem controla a sutileza
+  - `--glass-bg`: de `rgba(255,255,255,0.07)` para `rgba(255, 255, 255, 0.13)` — mais visível
+  - `--glass-blur`: de `14px` para `18px` — blur mais perceptível
+  - `--glass-btn-bg`: de `rgba(91,184,245,0.18)` para `rgba(91,184,245,0.25)` — botões mais definidos
+  → `src/styles/global.css`
 
-- [x] 3. Remover `backdrop-filter` e `-webkit-backdrop-filter` do `.textarea` em `PostOutput.module.css` → `src/components/PostOutput/PostOutput.module.css`
+- [ ] 3. Ajustar opacidades individuais das nuvens em `clouds.css` — com `--color-cloud` agora branco (0.90), reduzir opacidades para que as nuvens fiquem sutis mas claramente brancas:
+  - `.cloud-1`: 0.18
+  - `.cloud-2`: 0.14
+  - `.cloud-3`: 0.16
+  - `.cloud-4`: 0.20
+  - `.cloud-5`: 0.15
+  - `.cloud-6`: 0.22
+  → `src/styles/clouds.css`
 
 ---
 
@@ -39,27 +54,25 @@ Nenhum.
 
 | Arquivo | O que muda |
 |---|---|
-| `src/components/History/History.module.css` | Remove `backdrop-filter` e `padding` do `.section` |
-| `src/components/PostForm/PostForm.module.css` | Remove `backdrop-filter` do `.textarea` |
-| `src/components/PostOutput/PostOutput.module.css` | Remove `backdrop-filter` do `.textarea` |
+| `src/components/CloudBackground/CloudBackground.jsx` | Adicionar classe `cloud` em cada div |
+| `src/styles/global.css` | Corrigir `--color-cloud`, `--glass-bg`, `--glass-blur`, `--glass-btn-bg` |
+| `src/styles/clouds.css` | Reduzir opacidades individuais (0.14–0.22) |
 
 ## O que NÃO fazer
 
-- Não remover `background: rgba(255,255,255,0.05)` dos elementos — manter a aparência levemente diferenciada
-- Não remover `border: 1px solid var(--glass-border)` das textareas — mantém a separação visual
-- Não remover `backdrop-filter` dos containers externos (`.leftColumn`, `.rightColumn`, `.header`) — esses são corretos
-- Não alterar nenhum outro arquivo CSS além dos 3 listados
+- Não alterar posições, tamanhos nem animation-delay das nuvens
 - Não alterar lógica JavaScript
+- Não alterar CSS Modules dos componentes
 
 ## Critérios de aceite
 
-- [ ] `History.section` não tem mais `backdrop-filter` nem padding próprio
-- [ ] Textareas do `PostForm` e `PostOutput` não têm mais `backdrop-filter`
-- [ ] Visual dos cards externos (`.leftColumn`, `.rightColumn`) preservado com glassmorphism
-- [ ] Sem duplo padding ao redor do histórico
-- [ ] Conteúdo das textareas legível (contraste mantido)
+- [ ] Nuvens aparecem brancas/claras sobre o fundo azul escuro
+- [ ] Nuvens se movem horizontalmente de forma visível
+- [ ] Card de login tem glassmorphism perceptível (borrada, semi-transparente)
+- [ ] Botões com tint azul visível no glassmorphism
+- [ ] Nuvens passam ATRÁS do card (card em z-index superior às nuvens)
 
 ## Dependências e riscos
 
-- Risco zero — remoção de propriedades CSS redundantes
-- Os elementos internos mantêm aparência diferenciada via `background` semi-transparente sem blur
+- Risco baixo — apenas valores CSS alterados
+- Com `--color-cloud` mais opaco, as opacidades individuais DEVEM ser reduzidas (feito na subtarefa 3), caso contrário as nuvens ficarão muito pesadas
