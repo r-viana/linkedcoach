@@ -58,9 +58,9 @@ Construir o MVP completo do LinkedCoach do zero: setup do projeto, banco de dado
 
 ### Frontend — Infraestrutura
 
-- [ ] 24. Criar `src/lib/supabaseClient.js` — instância única do Supabase usando variáveis `VITE_` → `src/lib/supabaseClient.js`
-- [ ] 25. Criar `src/hooks/useAuth.js` — session state, `signInWithEmail`, `signInWithGoogle`, `signInWithGitHub`, `signOut`, listener `onAuthStateChange` → `src/hooks/useAuth.js`
-- [ ] 26. Criar `src/hooks/useHistory.js` — `fetchHistory` (últimos 20, desc), `addToHistory` (inserir na lista local), `selectPost` (carregar no output) → `src/hooks/useHistory.js`
+- [x] 24. Criar `src/lib/supabaseClient.js` — instância única do Supabase usando variáveis `VITE_` → `src/lib/supabaseClient.js`
+- [x] 25. Criar `src/hooks/useAuth.js` — session state, `signInWithEmail`, `signInWithGoogle`, `signInWithGitHub`, `signOut`, listener `onAuthStateChange` → `src/hooks/useAuth.js`
+- [x] 26. Criar `src/hooks/useHistory.js` — `fetchHistory` (últimos 20, desc), `addToHistory` (inserir na lista local), `selectPost` (carregar no output) → `src/hooks/useHistory.js`
 
 ### Frontend — Estilos
 
