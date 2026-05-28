@@ -124,7 +124,7 @@ linkedcoach/
 - **Funções e variáveis**: camelCase
 - **CSS Modules**: mesmo nome do componente (`PostForm.module.css`)
 - **API Routes**: kebab-case (`generate.js`)
-- **Commits**: Conventional Commits (`feat:`, `fix:`, `chore:`, `style:`)
+- **Commits**: Conventional Commits (`feat:`, `fix:`, `chore:`, `style:`) — **descrições sempre em português**
 - Sem TypeScript — JavaScript puro com JSDoc onde necessário
 - Sem lib de componentes (MUI, shadcn etc.) — CSS próprio
 

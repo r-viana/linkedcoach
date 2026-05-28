@@ -76,6 +76,7 @@ function sanitize(str) {
 // ---------------------------------------------------------------------------
 function buildPrompt(phrase, tone) {
   return `Você é um gerador satírico de posts para LinkedIn.
+
 Escreva um post no estilo típico de coaches e empreendedores do LinkedIn:
 use frases de efeito, história pessoal emocionante (pode ser inventada),
 quebras de linha dramáticas, emojis estratégicos, moral da história no final
@@ -84,7 +85,12 @@ e um CTA (call to action) genérico.
 Tom solicitado pelo usuário: ${tone}
 Ideia ou frase de partida: ${phrase}
 
-Retorne apenas o texto do post, sem explicações.`;
+Regras obrigatórias:
+- Use a frase de partida e o tom apenas como inspiração — não os copie literalmente no post
+- Substitua qualquer termo inadequado ou palavrão por metáforas no estilo LinkedIn
+- Nunca mencione, estereotipe ou ridicularize grupos por raça, gênero, religião ou orientação
+- O post deve ter entre 150 e 300 palavras
+- Retorne apenas o texto do post, sem explicações, títulos ou formatação externa`;
 }
 
 // ---------------------------------------------------------------------------
@@ -124,7 +130,7 @@ async function tryGroq(prompt) {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'llama3-8b-8192',
+        model: 'llama-3.1-8b-instant',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.9,
         max_tokens: 512,
@@ -154,7 +160,7 @@ async function tryGemini(prompt) {
   if (!apiKey) throw new Error('GEMINI_API_KEY not configured');
 
   const response = await fetchWithTimeout(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
