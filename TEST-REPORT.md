@@ -1,7 +1,7 @@
 # TEST-REPORT.md
 
-**Data:** 2026-05-27
-**Feature testada:** MVP LinkedCoach — Aplicação Completa
+**Data:** 2026-05-28
+**Feature testada:** Redesign Visual — Glassmorphism + Nuvens Animadas
 **Resultado geral:** APROVADO COM ALERTAS
 
 ---
@@ -10,24 +10,19 @@
 
 | Teste | Status | Observação |
 |-------|--------|------------|
-| Rota `/` sem auth redireciona para `/login` | ✓ | Guard em `Home.jsx` linha 34 |
-| Rota `/login` com auth redireciona para `/` | ✓ | Guard em `Login.jsx` linha 49 |
-| Rota desconhecida redireciona para `/` | ✓ | `App.jsx` rota `*` |
-| Botão "Gerar Post" desabilitado com frase vazia | ✓ | `PostForm.jsx:57` — `disabled={loading \|\| !phrase.trim()}` |
-| Botão "Gerar Post" desabilitado durante loading | ✓ | `generating` state controla `loading` prop |
-| Contador de tom exibe chars restantes | ✓ | `toneRemaining = 140 - tone.length` |
-| Contador fica vermelho abaixo de 20 chars | ✓ | `counterWarning` class aplicada |
-| `maxLength={140}` no textarea de tom | ✓ | `PostForm.jsx:42` |
-| Post aparece no `PostOutput` após geração | ✓ | `generatedPost` → prop `post` |
-| Botão "Copiar" muda para "Copiado! ✓" por 2s | ✓ | `setTimeout(() => setCopied(false), 2000)` |
-| Clique no histórico carrega post no output | ✓ | `selectPost` → `selectedPost?.output_post` |
-| Post mais recente aparece no topo do histórico | ✓ | `addToHistory` faz prepend com `.slice(0, 20)` |
-| Busca do histórico usa `ORDER BY created_at DESC` | ✓ | `useHistory.js:26` |
-| Erro 429 (rate limit) exibido ao usuário | ✓ | `data.error` → `generateError` state |
-| Post gerado retornado mesmo quando Supabase falha | ✓ | `{ post, saved: false }` ainda renderiza output |
-| Autenticação OAuth usa `window.location.origin` como redirectTo | ✓ | `useAuth.js:42,47` |
+| Botão "Gerar Post" desabilitado com frase vazia | ✓ | `.button:disabled` preservado em `PostForm.module.css:72` |
+| Botão "Copiar" desabilitado sem post | ✓ | `.copyButton:disabled` preservado em `PostOutput.module.css:55` |
+| Contador de tom (max 140) | ✓ | `.counter` e `.counterWarning` preservados |
+| Placeholder nos textareas | ✓ | `::placeholder` com `color` e `opacity` preservados |
+| Focus em inputs muda borda | ✓ | `border-color: var(--color-accent)` em `:focus` mantido |
+| Responsividade: grid 1 coluna em mobile | ✓ | `@media (max-width: 767px)` preservado |
+| Variáveis CSS glassmorphism definidas no `:root` | ✓ | 8 variáveis adicionadas em `global.css:13-21` |
+| `overflow-x: hidden` no body | ✓ | Adicionado em `global.css:43` — previne scroll horizontal das nuvens |
+| Backdrop-filter no `.section` do History (fora do overflow-y) | ✓ | Alerta do revisor incorporado corretamente |
+| Estado `itemSelected` do histórico | ✓ | `rgba(91,184,245,0.15)` com `border-left-color: var(--color-accent)` |
+| Hover dos itens do histórico | ✓ | `rgba(255,255,255,0.10)` — feedback visual mantido |
 
-Resultado: **16/16 passando** (análise estática)
+Resultado: **11/11 passando**
 
 ---
 
@@ -35,157 +30,55 @@ Resultado: **16/16 passando** (análise estática)
 
 | Vetor | Resultado | Severidade | Detalhe |
 |-------|-----------|------------|---------|
-| IDOR — `userId` do body | Protegido | — | `userId` extraído **somente** do JWT via `supabase.auth.getUser(token)` em `api/generate.js:388` |
-| XSS — erro da API no frontend | Protegido | — | React auto-escapa strings; `{generateError}` e `{error}` são texto puro |
-| XSS — post gerado no textarea | Protegido | — | `<textarea value={...}>` nunca executa HTML |
-| SQL injection — inputs do usuário | Protegido | — | Supabase client usa queries parametrizadas; sem SQL manual |
-| Rota `/api/generate` sem token | Protegido | — | Retorna 401 quando `authHeader` vazio (linha 367) |
-| Rota `/api/generate` método GET | Protegido | — | Retorna 405 — só aceita POST |
-| `SUPABASE_SERVICE_ROLE_KEY` no bundle frontend | Protegido | — | Variável sem prefixo `VITE_` — não exposta no build Vite |
-| Rate limiting — spam de gerações | Protegido (básico) | — | 10 req/min por userId em Map em memória |
-| Erro de IA expõe qual API falhou | Protegido | — | Resposta sempre `"Não foi possível gerar o post."` |
-| Stack trace no response de erro | Protegido | — | `console.error` vai só para Vercel logs |
-| RLS bypass — usuário B lendo posts do A | Protegido | — | RLS ativo; anon key no frontend; `useHistory.fetchHistory` filtra por `user_id` |
+| Mudança de lógica JS | Nenhuma | — | Apenas CSS modificado — zero impacto em segurança |
+| Secrets no CSS | Protegido | — | Nenhuma chave ou valor sensível nos arquivos CSS |
+| XSS via CSS injection | Não aplicável | — | CSS Modules não aceita input do usuário |
+| Regressão em auth guard | Nenhuma | — | Nenhum arquivo `.jsx` de lógica modificado além de `Login.jsx` inline styles |
 
 ---
 
 ## Bugs e alertas identificados
 
-### 🔴 Alerta médio — Session null crash em `handleGenerate`
+### 🟡 Alerta — Nested `backdrop-filter` reduz eficácia do glassmorphism interno
 
-**Arquivo:** [src/pages/Home.jsx:43](src/pages/Home.jsx#L43)
+**Arquivos:** [src/pages/Home.module.css:74-81](src/pages/Home.module.css#L74), [src/components/History/History.module.css:1-13](src/components/History/History.module.css#L1), [src/components/PostForm/PostForm.module.css:22-23](src/components/PostForm/PostForm.module.css#L22)
 
-```js
-const { data: { session } } = await supabase.auth.getSession()
-Authorization: `Bearer ${session.access_token}` // TypeError se session for null
-```
+O `.leftColumn` tem `backdrop-filter: blur(14px)`, criando um stacking context isolado. Os elementos internos — `History.section` (`blur(14px)`) e `PostForm.textarea` (`blur(4px)`) — aplicam `backdrop-filter` sobre o stacking context do pai (já desfocado), **não sobre as nuvens diretamente**. O efeito final é vidro dentro de vidro: os elementos internos parecem mais opacos que o esperado, sem mostrar nuvens através deles.
 
-Se o token expirar exatamente entre o `useEffect` inicial e o momento do submit, `session` será `null` e `session.access_token` lança `TypeError`. O `catch` captura e exibe **"Erro ao gerar o post. Tente novamente."** — mensagem enganosa. O usuário não sabe que precisa fazer login novamente.
+**Não é um bug funcional** — a UI funciona normalmente. É um desvio estético do efeito pretendido para os componentes internos.
 
-**Correção:** checar `session` antes de usar e redirecionar para `/login` se nula.
-
-```js
-const { data: { session } } = await supabase.auth.getSession()
-if (!session) {
-  setGenerateError('Sua sessão expirou. Faça login novamente.')
-  return
-}
-```
+**Possível correção futura:** remover `backdrop-filter` dos elementos internos (`.section`, `.textarea`) e manter apenas nos containers externos (`.leftColumn`, `.rightColumn`). Isso preserva o glassmorphism onde importa sem criar camadas redundantes.
 
 ---
 
-### 🟡 Alerta médio — `handleCopy` sem try/catch
+### 🟡 Alerta — Duplo padding entre `.leftColumn` e componentes internos
 
-**Arquivo:** [src/components/PostOutput/PostOutput.jsx:12-15](src/components/PostOutput/PostOutput.jsx#L12)
+**Arquivo:** [src/pages/Home.module.css:79](src/pages/Home.module.css#L79)
 
-```js
-await navigator.clipboard.writeText(localPost)
-setCopied(true) // nunca executado se writeText lançar
-```
+`.leftColumn` agora tem `padding: 1.25rem`. Os componentes internos (PostForm, History) mantêm suas próprias margens e gaps. Isso resulta em padding duplo que pode deixar o layout visualmente mais comprimido, especialmente em mobile.
 
-`navigator.clipboard.writeText` lança em: (a) HTTP puro em dev sem HTTPS, (b) permissão negada, (c) foco fora do documento. Falha silenciosa — o usuário clica "Copiar" e nada acontece, sem feedback.
-
-**Correção:**
-```js
-try {
-  await navigator.clipboard.writeText(localPost)
-  setCopied(true)
-  setTimeout(() => setCopied(false), 2000)
-} catch {
-  setGenerateError('Não foi possível copiar. Use Ctrl+C.')
-}
-```
+**Impacto:** estético. Não quebra layout nem funcionalidade.
 
 ---
 
-### 🟡 Alerta médio — `phrase` sem limite de tamanho no backend
+### 🔵 Info — `blur(var(--glass-blur))` requer suporte a CSS custom properties em funções
 
-**Arquivo:** [api/generate.js:356-361](api/generate.js#L356)
+**Arquivo:** [src/styles/global.css:17](src/styles/global.css#L17) usado via `blur(var(--glass-blur))` em múltiplos arquivos
 
-O backend valida que `phrase` não é vazio, mas não limita o tamanho. Um usuário pode enviar 500.000 caracteres, gerando um prompt gigante que:
-1. Excede o context window de `llama3-8b-8192` (8192 tokens)
-2. Desperdiça os 3 fallbacks em sequência
-3. Consome toda a janela de 10s do Vercel
-
-**Correção:** adicionar logo após a validação de `phrase` vazia:
-```js
-if (cleanPhrase.length > 5000) {
-  return res.status(400).json({ error: 'A frase é muito longa. Máximo de 5000 caracteres.' })
-}
-```
+Funciona em Chrome 76+, Safari 15.4+, Firefox 103+, Edge 79+. Cobertura de ~97% dos browsers em uso global. Sem fallback para browsers antigos — aceitável para o MVP.
 
 ---
 
-### 🟡 Alerta leve — `History` sem suporte a teclado
-
-**Arquivo:** [src/components/History/History.jsx:26-30](src/components/History/History.jsx#L26)
-
-```jsx
-<li onClick={() => onSelect(post)}>
-```
-
-Sem `tabIndex={0}`, `role="button"` ou `onKeyDown`. Usuários de teclado e leitores de tela não conseguem navegar pelo histórico.
-
-**Correção:**
-```jsx
-<li
-  tabIndex={0}
-  role="button"
-  onClick={() => onSelect(post)}
-  onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onSelect(post)}
->
-```
-
----
-
-### 🟡 Alerta leve — `saved: false` gera histórico fantasma
-
-**Arquivo:** [src/pages/Home.jsx:60-66](src/pages/Home.jsx#L60)
-
-Quando Supabase falha ao salvar (`{ post, saved: false }`), o post é adicionado ao histórico local via `addToHistory`. O usuário vê o item na lista, mas ao recarregar a página ele some. Sem feedback de que o post não foi salvo.
-
-**Correção sugerida:** checar `data.saved !== false` antes de adicionar ao histórico, e exibir aviso: *"Post gerado mas não foi salvo no histórico."*
-
----
-
-### 🟡 Alerta leve — Erro de login não limpa ao clicar em OAuth
-
-**Arquivo:** [src/pages/Login.jsx:39](src/pages/Login.jsx#L39)
-
-Se o login por email falha e o erro é exibido, clicar em "Entrar com Google" não limpa o estado `error`. O card fica com mensagem de erro vermelha visível enquanto o usuário aguarda o redirect OAuth.
-
-**Correção:** chamar `setError(null)` nos handlers `onSignInWithGoogle` e `onSignInWithGitHub`.
-
----
-
-### 🔵 Info — `fetchHistory` sem `fetchHistory` no array de deps do `useEffect`
-
-**Arquivo:** [src/pages/Home.jsx:20-24](src/pages/Home.jsx#L20)
-
-```js
-useEffect(() => {
-  if (user) fetchHistory(user.id)
-}, [user]) // fetchHistory ausente no array
-```
-
-`fetchHistory` é estável (vem de `useState`) então não há risco de loop infinito, mas ESLint com `eslint-plugin-react-hooks` levantará warning. Em StrictMode (dev), o efeito roda duas vezes — causando 2 fetches na montagem. Inofensivo, mas gera requisições redundantes.
-
----
-
-## Fluxos caóticos testados
+## Fluxos caóticos testados (CSS)
 
 | Cenário | Resultado | Severidade |
 |---------|-----------|------------|
-| Submeter form sem preencher frase | ✓ Bloqueado — botão desabilitado quando `phrase.trim()` vazio | — |
-| Frase com apenas espaços em branco | ✓ Bloqueado — `!phrase.trim()` desabilita botão e `cleanPhrase` fica vazio no backend | — |
-| Colar 10.000 chars no campo frase | ✗ Sem limite — enviado integralmente ao backend e às IAs | 🟡 Médio |
-| Duplo clique em "Gerar Post" | ✓ Protegido — botão desabilitado durante `generating` | — |
-| Tom com 141 chars | ✓ Bloqueado — `maxLength={140}` no textarea | — |
-| Session expirada ao submeter | ✗ TypeError silencioso → mensagem enganosa | 🟡 Médio |
-| Copiar com clipboard bloqueado | ✗ Falha silenciosa — sem feedback ao usuário | 🟡 Médio |
-| Recarregar página após post `saved: false` | ✗ Post some do histórico sem aviso | 🟡 Leve |
-| Navegar para URL inexistente | ✓ Redirecionado para `/` via `<Route path="*">` | — |
-| Sem internet ao gerar post | ✓ `fetch` lança, catch mostra "Erro ao gerar o post" | — |
+| Redimensionar para 320px | ✓ Grid 1 coluna, cards empilhados corretamente | — |
+| Redimensionar para 768px | ✓ Transição de 1 para 2 colunas no breakpoint | — |
+| Redimensionar para 1280px+ | ✓ `max-width: 1200px` limita a expansão | — |
+| Scroll vertical na Home | ✓ Nuvens ficam fixas (position: fixed), conteúdo scrolla normalmente | — |
+| Scroll horizontal | ✓ `overflow-x: hidden` no body previne scroll espúrio | — |
+| History com scroll interno | ✓ `overflow-y: auto` na `.list` preservado; backdrop-filter na `.section` fora do overflow | — |
 
 ---
 
@@ -193,23 +86,12 @@ useEffect(() => {
 
 | Largura | Status | Observação |
 |---------|--------|------------|
-| 320px (mobile mínimo) | ✓ | Grid de 1 coluna abaixo de 768px; `width: min(420px, 90vw)` no card de login |
-| 768px (tablet) | ✓ | Breakpoint de transição 1→2 colunas em `Home.module.css` |
-| 1280px (desktop) | ✓ | Layout 2 colunas ativo |
+| 320px | ✓ | Grid 1 coluna; cards glassmorphism empilhados; Login card `min(420px, 90vw)` se ajusta |
+| 768px | ✓ | Breakpoint de transição preservado |
+| 1280px | ✓ | Layout 2 colunas com glassmorphism visível |
 
 ---
 
 ## Veredicto
 
-**[APROVADO COM ALERTAS]** — Nenhum vetor crítico de segurança confirmado (IDOR, XSS, SQL injection, secrets expostos — todos protegidos). Sem bloqueadores para deploy.
-
-**Correções recomendadas antes do deploy (ordem de prioridade):**
-
-| # | Arquivo | Correção |
-|---|---------|----------|
-| 1 | [api/generate.js:411](api/generate.js#L411) | Adicionar limite de 5000 chars em `cleanPhrase` após sanitização |
-| 2 | [src/pages/Home.jsx:43](src/pages/Home.jsx#L43) | Checar `session !== null` antes de `session.access_token` |
-| 3 | [src/components/PostOutput/PostOutput.jsx:12](src/components/PostOutput/PostOutput.jsx#L12) | try/catch em `navigator.clipboard.writeText` |
-| 4 | [src/components/History/History.jsx:26](src/components/History/History.jsx#L26) | Adicionar `tabIndex`, `role="button"` e `onKeyDown` nos items da lista |
-| 5 | [src/pages/Home.jsx:60](src/pages/Home.jsx#L60) | Tratar `saved: false` com aviso ao usuário |
-| 6 | [src/pages/Login.jsx:53](src/pages/Login.jsx#L53) | Limpar `error` ao iniciar fluxo OAuth |
+**[APROVADO COM ALERTAS]** — Nenhum crítico funcional ou de segurança. Dois alertas estéticos sobre nested backdrop-filter e duplo padding nos cards internos, que podem ser refinados em iteração futura se o visual não agradar. A funcionalidade completa do app está preservada.
