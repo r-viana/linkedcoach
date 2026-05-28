@@ -72,8 +72,16 @@ export default function Login() {
             Transforme qualquer frase em um post de LinkedIn coach
           </p>
           <AuthButtons
-            onSignInWithGoogle={() => { setError(null); signInWithGoogle() }}
-            onSignInWithGitHub={() => { setError(null); signInWithGitHub() }}
+            onSignInWithGoogle={async () => {
+              setError(null)
+              const { error } = await signInWithGoogle()
+              if (error) setError('Não foi possível conectar com o Google. Tente novamente.')
+            }}
+            onSignInWithGitHub={async () => {
+              setError(null)
+              const { error } = await signInWithGitHub()
+              if (error) setError('Não foi possível conectar com o GitHub. Tente novamente.')
+            }}
             onSignInWithEmail={handleSignInWithEmail}
             onSignUpWithEmail={handleSignUpWithEmail}
             error={error}
