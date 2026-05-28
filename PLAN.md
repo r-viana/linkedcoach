@@ -77,15 +77,15 @@ Construir o MVP completo do LinkedCoach do zero: setup do projeto, banco de dado
 
 ### Frontend — Páginas e Roteamento
 
-- [ ] 34. Criar `src/pages/Login.jsx` — layout centralizado com logo + `CloudBackground` + `AuthButtons`; se já autenticado, redireciona para `/` → `src/pages/Login.jsx`
-- [ ] 35. Criar `src/pages/Home.jsx` — layout CSS Grid 2 colunas desktop / 1 coluna mobile; coluna esquerda: `PostForm` + `History`; coluna direita: `PostOutput`; header com email do usuário + botão logout → `src/pages/Home.jsx`
-- [ ] 36. Criar `src/App.jsx` — `BrowserRouter` + rotas (`/` → Home, `/login` → Login); guard de auth: rota `/` redireciona para `/login` se não autenticado → `src/App.jsx`
-- [ ] 37. Criar `src/main.jsx` — ponto de entrada, importa `global.css`, renderiza `<App />` → `src/main.jsx`
-- [ ] 38. Criar `public/favicon.svg` — ícone simples do LinkedCoach (ex: "LC" em Bebas Neue azul) → `public/favicon.svg`
+- [x] 34. Criar `src/pages/Login.jsx` — layout centralizado com logo + `CloudBackground` + `AuthButtons`; se já autenticado, redireciona para `/` → `src/pages/Login.jsx`
+- [x] 35. Criar `src/pages/Home.jsx` — layout CSS Grid 2 colunas desktop / 1 coluna mobile; coluna esquerda: `PostForm` + `History`; coluna direita: `PostOutput`; header com email do usuário + botão logout → `src/pages/Home.jsx`
+- [x] 36. Criar `src/App.jsx` — `BrowserRouter` + rotas (`/` → Home, `/login` → Login); guard de auth: rota `/` redireciona para `/login` se não autenticado → `src/App.jsx`
+- [x] 37. Criar `src/main.jsx` — ponto de entrada, importa `global.css`, renderiza `<App />` → `src/main.jsx`
+- [x] 38. Criar `public/favicon.svg` — ícone simples do LinkedCoach (ex: "LC" em Bebas Neue azul) → `public/favicon.svg`
 
 ### Integração & Deploy
 
-- [ ] 39. Conectar `PostForm` → `api/generate` → `PostOutput` + `History`: ao submeter, obter o token via `const { data: { session } } = await supabase.auth.getSession()` e enviar `session.access_token` no header `Authorization: Bearer <token>`; body: `{ phrase, tone }` apenas; atualizar output e histórico com retorno → `src/pages/Home.jsx`
+- [x] 39. Conectar `PostForm` → `api/generate` → `PostOutput` + `History`: ao submeter, obter o token via `const { data: { session } } = await supabase.auth.getSession()` e enviar `session.access_token` no header `Authorization: Bearer <token>`; body: `{ phrase, tone }` apenas; atualizar output e histórico com retorno → `src/pages/Home.jsx`
 - [ ] 40. **[MANUAL]** Criar projeto no Vercel conectado ao repositório GitHub (`r-viana/linkedcoach`)
 - [ ] 41. **[MANUAL]** Configurar todas as variáveis de ambiente no painel Vercel (mesmas do `.env.example`)
 - [ ] 42. Fazer push do branch `main` e verificar deploy bem-sucedido no Vercel → terminal

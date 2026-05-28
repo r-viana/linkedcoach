@@ -1,0 +1,93 @@
+.header {
+  background: var(--color-surface);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.headerLogo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  color: var(--color-accent);
+  letter-spacing: 0.03em;
+}
+
+.headerUser {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.headerEmail {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.signOutButton {
+  background: transparent;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.signOutButton:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.layout {
+  position: relative;
+  z-index: 1;
+  min-height: calc(100vh - 56px);
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.errorMessage {
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+}
+
+.loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+}
