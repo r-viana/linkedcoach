@@ -3,7 +3,6 @@ import styles from './AuthButtons.module.css'
 
 export default function AuthButtons({
   onSignInWithGoogle,
-  onSignInWithGitHub,
   onSignInWithEmail,
   onSignUpWithEmail,
   error,
@@ -26,17 +25,9 @@ export default function AuthButtons({
       <button
         type="button"
         className={styles.socialButton}
-        onClick={() => { console.log('[AuthButtons] clique Google'); onSignInWithGoogle() }}
+        onClick={onSignInWithGoogle}
       >
         Entrar com Google
-      </button>
-
-      <button
-        type="button"
-        className={styles.socialButton}
-        onClick={() => { console.log('[AuthButtons] clique GitHub'); onSignInWithGitHub() }}
-      >
-        Entrar com GitHub
       </button>
 
       <div className={styles.divider}>

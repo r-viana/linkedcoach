@@ -35,7 +35,7 @@ const styles = {
 }
 
 export default function Login() {
-  const { user, loading, signInWithGoogle, signInWithGitHub, signInWithEmail, signUpWithEmail } = useAuth()
+  const { user, loading, signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth()
   const [error, setError] = useState(null)
 
   if (loading) {
@@ -73,18 +73,9 @@ export default function Login() {
           </p>
           <AuthButtons
             onSignInWithGoogle={async () => {
-              console.log('[Login] callback Google iniciado')
               setError(null)
               const { error } = await signInWithGoogle()
-              console.log('[Login] callback Google finalizado, error:', error?.message ?? 'nenhum')
               if (error) setError('Não foi possível conectar com o Google. Tente novamente.')
-            }}
-            onSignInWithGitHub={async () => {
-              console.log('[Login] callback GitHub iniciado')
-              setError(null)
-              const { error } = await signInWithGitHub()
-              console.log('[Login] callback GitHub finalizado, error:', error?.message ?? 'nenhum')
-              if (error) setError('Não foi possível conectar com o GitHub. Tente novamente.')
             }}
             onSignInWithEmail={handleSignInWithEmail}
             onSignUpWithEmail={handleSignUpWithEmail}
