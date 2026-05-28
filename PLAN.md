@@ -1,4 +1,4 @@
-# PLAN.md — Redesign Visual: Glassmorphism + Nuvens Animadas
+# PLAN.md — Fix: Nested Glassmorphism e Duplo Padding
 
 **Data:** 2026-05-28
 **Solicitado por:** Ramon Vasconcelos
@@ -8,40 +8,26 @@
 
 ## Objetivo
 
-Redesenhar a interface visual das páginas de Login e Home com glassmorphism nos botões e cards, e tornar as nuvens animadas visíveis no fundo azul de modo que passem atrás dos elementos de conteúdo.
+Corrigir os dois alertas visuais do TEST-REPORT do redesign glassmorphism: remover `backdrop-filter` redundante de elementos dentro de containers já desfocados, e eliminar duplo padding entre `.leftColumn` e `History.section`.
 
 ## Módulos afetados
 
 - `Banco` — nenhuma alteração
 - `Backend` — nenhuma alteração
-- `Frontend` — CSS Modules de todos os componentes visuais, `global.css`, `clouds.css`, `Login.jsx` (inline styles)
+- `Frontend` — 3 arquivos CSS: `History.module.css`, `PostForm.module.css`, `PostOutput.module.css`
 - `Autenticação` — nenhuma alteração
 
 ---
 
 ## Subtarefas
 
-### Frontend — Estilos base
+### Frontend
 
-- [x] 1. Atualizar `global.css`: adicionar variáveis CSS de glassmorphism reutilizáveis + `overflow-x: hidden` no body → `src/styles/global.css`
+- [x] 1. Remover `backdrop-filter` e `-webkit-backdrop-filter` do `.section` em `History.module.css`, e remover `padding` do `.section` → `src/components/History/History.module.css`
 
-- [x] 2. Atualizar `clouds.css`: aumentar opacidade das 6 nuvens para 0.35–0.50 e duração para 80s–160s → `src/styles/clouds.css`
+- [x] 2. Remover `backdrop-filter` e `-webkit-backdrop-filter` do `.textarea` em `PostForm.module.css` → `src/components/PostForm/PostForm.module.css`
 
-### Frontend — Cards e layout
-
-- [x] 3. Aplicar glassmorphism no card da página de Login → `src/pages/Login.jsx`
-
-- [x] 4. Aplicar glassmorphism no header e nas colunas da Home → `src/pages/Home.module.css`
-
-### Frontend — Componentes
-
-- [x] 5. Redesenhar botões em `AuthButtons.module.css` com glassmorphism → `src/components/AuthButtons/AuthButtons.module.css`
-
-- [x] 6. Redesenhar botão "Gerar Post" e textareas do `PostForm` com glassmorphism → `src/components/PostForm/PostForm.module.css`
-
-- [x] 7. Aplicar glassmorphism no `PostOutput` → `src/components/PostOutput/PostOutput.module.css`
-
-- [x] 8. Aplicar glassmorphism no card do `History` (section, não items) → `src/components/History/History.module.css`
+- [x] 3. Remover `backdrop-filter` e `-webkit-backdrop-filter` do `.textarea` em `PostOutput.module.css` → `src/components/PostOutput/PostOutput.module.css`
 
 ---
 
@@ -53,38 +39,27 @@ Nenhum.
 
 | Arquivo | O que muda |
 |---|---|
-| `src/styles/global.css` | `--color-cloud` mais visível + variáveis glassmorphism |
-| `src/styles/clouds.css` | Opacidade 0.35–0.55 + velocidade 80s–160s |
-| `src/pages/Login.jsx` | Card inline styles → glassmorphism |
-| `src/pages/Home.module.css` | Header + colunas com glassmorphism |
-| `src/components/AuthButtons/AuthButtons.module.css` | Todos os botões glassmorphism |
-| `src/components/PostForm/PostForm.module.css` | Botão + textareas glassmorphism |
-| `src/components/PostOutput/PostOutput.module.css` | Textarea + botão glassmorphism |
-| `src/components/History/History.module.css` | Card e lista glassmorphism |
+| `src/components/History/History.module.css` | Remove `backdrop-filter` e `padding` do `.section` |
+| `src/components/PostForm/PostForm.module.css` | Remove `backdrop-filter` do `.textarea` |
+| `src/components/PostOutput/PostOutput.module.css` | Remove `backdrop-filter` do `.textarea` |
 
 ## O que NÃO fazer
 
-- Não alterar lógica de nenhum componente — apenas CSS
-- Não alterar estrutura HTML/JSX dos componentes (exceto inline styles do Login.jsx)
-- Não usar JavaScript para animações — tudo em CSS puro
-- Não alterar z-index do `CloudBackground` (já está correto em `z-index: 0`)
-- Não adicionar novas dependências
+- Não remover `background: rgba(255,255,255,0.05)` dos elementos — manter a aparência levemente diferenciada
+- Não remover `border: 1px solid var(--glass-border)` das textareas — mantém a separação visual
+- Não remover `backdrop-filter` dos containers externos (`.leftColumn`, `.rightColumn`, `.header`) — esses são corretos
+- Não alterar nenhum outro arquivo CSS além dos 3 listados
+- Não alterar lógica JavaScript
 
 ## Critérios de aceite
 
-- [ ] Na tela de login: nuvens brancas visíveis se movendo sobre o fundo azul escuro
-- [ ] Card de login com efeito de vidro fosco (backdrop-filter: blur visível)
-- [ ] Botão "Entrar com Google" com estilo glassmorphism (sem cor sólida azul)
-- [ ] Na tela principal: header com glassmorphism, colunas com card translúcido
-- [ ] Botão "Gerar Post" com glassmorphism
-- [ ] Textareas com borda sutil e leve transparência
-- [ ] Nuvens visíveis através dos cards (efeito backdrop-filter funcionando)
-- [ ] Layout responsivo preservado (desktop 2 colunas / mobile 1 coluna)
-- [ ] Legibilidade do texto preservada (contraste adequado sobre vidro)
+- [ ] `History.section` não tem mais `backdrop-filter` nem padding próprio
+- [ ] Textareas do `PostForm` e `PostOutput` não têm mais `backdrop-filter`
+- [ ] Visual dos cards externos (`.leftColumn`, `.rightColumn`) preservado com glassmorphism
+- [ ] Sem duplo padding ao redor do histórico
+- [ ] Conteúdo das textareas legível (contraste mantido)
 
 ## Dependências e riscos
 
-- `backdrop-filter: blur()` não funciona no Firefox com suporte parcial — adicionar prefixo `-webkit-backdrop-filter` para Safari/Chrome. Firefox suporta desde v103, aceitável.
-- Se as nuvens estiverem muito rápidas após o ajuste, revisar `animation-duration` individualmente.
-- Contraste: glassmorphism pode reduzir legibilidade. Manter `color: var(--color-text)` (#e8f4fd) em todos os textos sobre vidro.
-- O efeito `backdrop-filter` só funciona se o elemento glassmorphism NÃO tiver `background` opaco — verificar que nenhum background sólido sobrescreve o CSS.
+- Risco zero — remoção de propriedades CSS redundantes
+- Os elementos internos mantêm aparência diferenciada via `background` semi-transparente sem blur
