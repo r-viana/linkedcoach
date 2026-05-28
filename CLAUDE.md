@@ -272,3 +272,37 @@ HUGGINGFACE_API_KEY=
 | Data | Descrição | Branch |
 |---|---|---|
 | — | — | — |
+
+---
+
+## 15. Cofre Obsidian — Base de Conhecimento
+
+O cofre Obsidian é o **cérebro vivo do projeto**. Localização: `linkedcoach/linkedcoach/` (pasta `linkedcoach/` na raiz do repositório).
+
+### Obrigações de todos os agentes
+
+**Ao iniciar qualquer tarefa:**
+1. Ler `00 - Índice.md` para orientação geral
+2. Ler as notas relevantes para a tarefa (ver tabela abaixo)
+
+**Ao concluir qualquer tarefa:**
+1. Atualizar as notas afetadas (status, decisões, riscos, backlog)
+2. Nunca deixar o cofre desatualizado em relação ao estado real do projeto
+
+### Qual nota cada agente deve ler e atualizar
+
+| Agente | Lê | Atualiza |
+|--------|-----|----------|
+| Arquiteto | `01 - Visão Geral`, `04 - Decisões Técnicas`, `08 - Alertas e Riscos` | `04 - Decisões Técnicas` (novas decisões) |
+| Arquiteto Contrário | `04 - Decisões Técnicas`, `08 - Alertas e Riscos` | `08 - Alertas e Riscos` (novos riscos) |
+| Orquestrador | `02 - Status MVP`, `08 - Alertas e Riscos` | `02 - Status MVP` (marcar tarefas concluídas) |
+| Criador | `01 - Visão Geral`, `05 - Banco de Dados`, `06 - Segurança`, `07 - Prompt de Geração` | — (Orquestrador atualiza status) |
+| Testador | `08 - Alertas e Riscos`, `02 - Status MVP` | `08 - Alertas e Riscos` (novos vetores encontrados) |
+| Revisor | `02 - Status MVP`, `04 - Decisões Técnicas` | `02 - Status MVP` (critérios de aceite) |
+
+### Regras do cofre
+
+- Nunca apagar notas — editar e manter histórico
+- Adicionar data nas atualizações significativas
+- Usar `[[links]]` para conectar notas relacionadas
+- Registrar em `03 - Backlog` qualquer ideia fora do escopo atual, em vez de implementar

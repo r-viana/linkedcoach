@@ -2,7 +2,7 @@
 
 **Data:** 2026-05-27
 **Solicitado por:** Ramon Vasconcelos
-**Status:** [ ] Em planejamento  [ ] Aprovado  [ ] Em execução  [ ] Concluído
+**Status:** [x] Em planejamento  [x] Aprovado  [x] Em execução  [ ] Concluído
 
 ---
 
