@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "4daa5fefec329a72",
+        "id": "4e1ccbe6806554f5",
         "type": "tabs",
         "children": [
           {
-            "id": "b41b7649916dfb94",
+            "id": "e32d03868a3b469e",
             "type": "leaf",
             "state": {
               "type": "graph",
@@ -176,8 +176,9 @@
       "bases:Criar nova base": false
     }
   },
-  "active": "b41b7649916dfb94",
+  "active": "e32d03868a3b469e",
   "lastOpenFiles": [
+    "Bem-vindo.md",
     "08 - Alertas e Riscos.md",
     "07 - Prompt de Geração.md",
     "06 - Segurança.md",
@@ -186,7 +187,6 @@
     "03 - Backlog.md",
     "02 - Status MVP.md",
     "01 - Visão Geral.md",
-    "00 - Índice.md",
-    "Bem-vindo.md"
+    "00 - Índice.md"
   ]
 }

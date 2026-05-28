@@ -8,7 +8,7 @@ tags: [status, mvp, progresso]
 > Atualizar conforme cada tarefa for concluída.
 
 **Última atualização:** 2026-05-27  
-**Status geral:** 🟡 Em progresso — backend concluído
+**Status geral:** 🟡 Em progresso — código completo, aguardando configuração manual (Supabase + Vercel)
 
 ---
 
@@ -53,42 +53,42 @@ tags: [status, mvp, progresso]
 
 ## Frontend — Infraestrutura
 
-- [ ] 24. `src/lib/supabaseClient.js`
-- [ ] 25. `src/hooks/useAuth.js` — session, signIn (email/Google/GitHub), signOut
-- [ ] 26. `src/hooks/useHistory.js` — fetchHistory, addToHistory, selectPost
+- [x] 24. `src/lib/supabaseClient.js`
+- [x] 25. `src/hooks/useAuth.js` — session, signIn (email/Google/GitHub), signOut
+- [x] 26. `src/hooks/useHistory.js` — fetchHistory, addToHistory, selectPost
 
 ---
 
 ## Frontend — Estilos
 
-- [ ] 27. `src/styles/global.css` — variáveis CSS, reset, fontes Google
-- [ ] 28. `src/styles/clouds.css` — 6 nuvens animadas CSS puro
+- [x] 27. `src/styles/global.css` — variáveis CSS, reset, fontes Google
+- [x] 28. `src/styles/clouds.css` — 6 nuvens animadas CSS puro
 
 ---
 
 ## Frontend — Componentes
 
-- [ ] 29. `CloudBackground` — fundo fixo, z-index: 0, pointer-events: none
-- [ ] 30. `AuthButtons` — Google OAuth, GitHub OAuth, form email/senha
-- [ ] 31. `PostForm` — textarea frase + textarea tom (max 140, contador) + botão + loading
-- [ ] 32. `PostOutput` — textarea editável + botão "Copiar" com feedback "Copiado!" 2s
-- [ ] 33. `History` — lista scrollável, click carrega no output
+- [x] 29. `CloudBackground` — fundo fixo, z-index: 0, pointer-events: none
+- [x] 30. `AuthButtons` — Google OAuth, GitHub OAuth, form email/senha
+- [x] 31. `PostForm` — textarea frase + textarea tom (max 140, contador) + botão + loading
+- [x] 32. `PostOutput` — textarea editável + botão "Copiar" com feedback "Copiado!" 2s
+- [x] 33. `History` — lista scrollável, click carrega no output
 
 ---
 
 ## Frontend — Páginas
 
-- [ ] 34. `src/pages/Login.jsx` — layout centralizado + redirect se autenticado
-- [ ] 35. `src/pages/Home.jsx` — grid 2 colunas desktop / 1 mobile
-- [ ] 36. `src/App.jsx` — rotas + guard de auth
-- [ ] 37. `src/main.jsx` — ponto de entrada
-- [ ] 38. `public/favicon.svg`
+- [x] 34. `src/pages/Login.jsx` — layout centralizado + redirect se autenticado
+- [x] 35. `src/pages/Home.jsx` — grid 2 colunas desktop / 1 mobile
+- [x] 36. `src/App.jsx` — rotas + guard de auth
+- [x] 37. `src/main.jsx` — ponto de entrada
+- [x] 38. `public/favicon.svg`
 
 ---
 
 ## Integração & Deploy
 
-- [ ] 39. Conectar PostForm → `/api/generate` → PostOutput + History (token via `getSession()`)
+- [x] 39. Conectar PostForm → `/api/generate` → PostOutput + History (token via `getSession()`)
 - [ ] 40. **[MANUAL]** Criar projeto Vercel conectado ao repo GitHub
 - [ ] 41. **[MANUAL]** Configurar variáveis de ambiente no painel Vercel
 - [ ] 42. Push `main` + verificar deploy
