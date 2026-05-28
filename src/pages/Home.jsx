@@ -42,6 +42,12 @@ export default function Home() {
     try {
       const { data: { session } } = await supabase.auth.getSession()
 
+      if (!session) {
+        setGenerateError('Sua sessão expirou. Faça login novamente.')
+        setGenerating(false)
+        return
+      }
+
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: {
@@ -57,6 +63,9 @@ export default function Home() {
         setGenerateError(data.error)
       } else if (data.post) {
         setGeneratedPost(data.post)
+        if (data.saved === false) {
+          setGenerateError('Post gerado, mas não foi salvo no histórico. Copie agora.')
+        }
         addToHistory({
           id: Date.now(),
           input_phrase: phrase,

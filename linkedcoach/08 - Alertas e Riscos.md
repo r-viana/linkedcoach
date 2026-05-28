@@ -49,6 +49,22 @@ Ver: [[05 - Banco de Dados]]
 
 ---
 
+## ⚠️ Identificados no Testador (2026-05-27 — corrigidos)
+
+### Sem limite de tamanho em `phrase` no backend
+**Problema:** backend não limitava tamanho da frase; usuário poderia enviar 100k chars, desperdiçando cascata de IAs.  
+**Correção:** adicionado limite de 5000 chars em `api/generate.js` após sanitização.
+
+### Session null em handleGenerate
+**Problema:** se o token expirar entre o mount e o submit, `session.access_token` lançava TypeError com mensagem enganosa.  
+**Correção:** verificação explícita de `session !== null` com mensagem "Sessão expirou".
+
+### `navigator.clipboard.writeText` sem try/catch
+**Problema:** falha silenciosa em HTTP local ou permissão negada.  
+**Correção:** try/catch com fallback de `textarea.select()`.
+
+---
+
 ## ❓ Perguntas Ainda Abertas
 
 - O repositório `r-viana/linkedcoach` já existe no GitHub ou precisa ser criado?

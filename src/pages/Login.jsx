@@ -72,8 +72,8 @@ export default function Login() {
             Transforme qualquer frase em um post de LinkedIn coach
           </p>
           <AuthButtons
-            onSignInWithGoogle={signInWithGoogle}
-            onSignInWithGitHub={signInWithGitHub}
+            onSignInWithGoogle={() => { setError(null); signInWithGoogle() }}
+            onSignInWithGitHub={() => { setError(null); signInWithGitHub() }}
             onSignInWithEmail={handleSignInWithEmail}
             onSignUpWithEmail={handleSignUpWithEmail}
             error={error}

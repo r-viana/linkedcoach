@@ -412,6 +412,13 @@ export default async function handler(req, res) {
       .json({ error: 'O campo "phrase" contém apenas caracteres inválidos.' });
   }
 
+  if (cleanPhrase.length > 5000) {
+    return res
+      .status(400)
+      .setHeader('Content-Type', 'application/json')
+      .json({ error: 'A frase é muito longa. Máximo de 5000 caracteres.' });
+  }
+
   // ── 4. Rate limiting ──────────────────────────────────────────────────────
   if (!checkRateLimit(userId)) {
     return res

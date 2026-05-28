@@ -23,7 +23,10 @@ export default function History({ history, onSelect, selectedPostId }) {
             <li
               key={post.id}
               className={`${styles.item} ${post.id === selectedPostId ? styles.itemSelected : ''}`}
+              tabIndex={0}
+              role="button"
               onClick={() => onSelect(post)}
+              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onSelect(post)}
             >
               {truncate(post.input_phrase)}
             </li>

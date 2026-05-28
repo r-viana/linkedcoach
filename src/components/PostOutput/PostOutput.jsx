@@ -11,9 +11,16 @@ export default function PostOutput({ post }) {
 
   async function handleCopy() {
     if (!localPost) return
-    await navigator.clipboard.writeText(localPost)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    try {
+      await navigator.clipboard.writeText(localPost)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      setCopied(false)
+      // fallback: seleciona o texto para o usuário copiar manualmente
+      const textarea = document.querySelector('textarea[aria-label="Post gerado"]')
+      if (textarea) textarea.select()
+    }
   }
 
   return (
