@@ -3,6 +3,13 @@
   flex-direction: column;
   gap: 8px;
   width: 100%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: var(--glass-shadow);
 }
 
 .title {
@@ -24,7 +31,7 @@
 
 .item {
   padding: 10px 12px;
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 6px;
   border-left: 3px solid transparent;
   color: var(--color-text);
@@ -35,12 +42,12 @@
 }
 
 .item:hover {
-  background: var(--color-surface-light);
+  background: rgba(255, 255, 255, 0.10);
 }
 
 .itemSelected {
   border-left-color: var(--color-accent);
-  background: var(--color-surface-light);
+  background: rgba(91, 184, 245, 0.15);
 }
 
 .empty {

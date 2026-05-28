@@ -14,11 +14,14 @@ const styles = {
     zIndex: 1,
   },
   card: {
-    background: 'var(--color-surface)',
+    background: 'var(--glass-bg)',
+    backdropFilter: 'blur(var(--glass-blur))',
+    WebkitBackdropFilter: 'blur(var(--glass-blur))',
     borderRadius: '16px',
     padding: '2.5rem',
     width: 'min(420px, 90vw)',
-    boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+    boxShadow: 'var(--glass-shadow)',
+    border: '1px solid var(--glass-border)',
   },
   title: {
     fontFamily: "'Bebas Neue', sans-serif",

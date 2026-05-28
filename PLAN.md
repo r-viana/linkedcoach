@@ -1,4 +1,4 @@
-# PLAN.md — Remoção do botão Login com GitHub
+# PLAN.md — Redesign Visual: Glassmorphism + Nuvens Animadas
 
 **Data:** 2026-05-28
 **Solicitado por:** Ramon Vasconcelos
@@ -8,26 +8,40 @@
 
 ## Objetivo
 
-Remover o botão "Entrar com GitHub" da tela de login e limpar todo o código relacionado ao GitHub OAuth, incluindo os logs de debug temporários adicionados nas sessões anteriores.
+Redesenhar a interface visual das páginas de Login e Home com glassmorphism nos botões e cards, e tornar as nuvens animadas visíveis no fundo azul de modo que passem atrás dos elementos de conteúdo.
 
 ## Módulos afetados
 
 - `Banco` — nenhuma alteração
 - `Backend` — nenhuma alteração
-- `Frontend` — `AuthButtons.jsx`, `Login.jsx`, `useAuth.js`
-- `Autenticação` — remoção do provider GitHub (apenas frontend; Supabase pode ser desativado manualmente)
+- `Frontend` — CSS Modules de todos os componentes visuais, `global.css`, `clouds.css`, `Login.jsx` (inline styles)
+- `Autenticação` — nenhuma alteração
 
 ---
 
 ## Subtarefas
 
-### Frontend
+### Frontend — Estilos base
 
-- [ ] 1. Remover botão "Entrar com GitHub" e prop `onSignInWithGitHub` de `AuthButtons.jsx` → `src/components/AuthButtons/AuthButtons.jsx`
+- [x] 1. Atualizar `global.css`: adicionar variáveis CSS de glassmorphism reutilizáveis + `overflow-x: hidden` no body → `src/styles/global.css`
 
-- [ ] 2. Remover `signInWithGitHub` do destructuring de `useAuth`, remover o callback `onSignInWithGitHub` e remover os logs de debug do GitHub em `Login.jsx` → `src/pages/Login.jsx`
+- [x] 2. Atualizar `clouds.css`: aumentar opacidade das 6 nuvens para 0.35–0.50 e duração para 80s–160s → `src/styles/clouds.css`
 
-- [ ] 3. Remover função `signInWithGitHub` do hook `useAuth.js`, remover do objeto de retorno, e remover todos os `console.log` de debug adicionados nas sessões anteriores (Google, GitHub e `onAuthStateChange`) → `src/hooks/useAuth.js`
+### Frontend — Cards e layout
+
+- [x] 3. Aplicar glassmorphism no card da página de Login → `src/pages/Login.jsx`
+
+- [x] 4. Aplicar glassmorphism no header e nas colunas da Home → `src/pages/Home.module.css`
+
+### Frontend — Componentes
+
+- [x] 5. Redesenhar botões em `AuthButtons.module.css` com glassmorphism → `src/components/AuthButtons/AuthButtons.module.css`
+
+- [x] 6. Redesenhar botão "Gerar Post" e textareas do `PostForm` com glassmorphism → `src/components/PostForm/PostForm.module.css`
+
+- [x] 7. Aplicar glassmorphism no `PostOutput` → `src/components/PostOutput/PostOutput.module.css`
+
+- [x] 8. Aplicar glassmorphism no card do `History` (section, não items) → `src/components/History/History.module.css`
 
 ---
 
@@ -39,27 +53,38 @@ Nenhum.
 
 | Arquivo | O que muda |
 |---|---|
-| `src/components/AuthButtons/AuthButtons.jsx` | Remover botão GitHub e prop `onSignInWithGitHub` |
-| `src/pages/Login.jsx` | Remover `signInWithGitHub`, callback do GitHub e logs de debug |
-| `src/hooks/useAuth.js` | Remover `signInWithGitHub`, remover do export e remover todos os `console.log` |
+| `src/styles/global.css` | `--color-cloud` mais visível + variáveis glassmorphism |
+| `src/styles/clouds.css` | Opacidade 0.35–0.55 + velocidade 80s–160s |
+| `src/pages/Login.jsx` | Card inline styles → glassmorphism |
+| `src/pages/Home.module.css` | Header + colunas com glassmorphism |
+| `src/components/AuthButtons/AuthButtons.module.css` | Todos os botões glassmorphism |
+| `src/components/PostForm/PostForm.module.css` | Botão + textareas glassmorphism |
+| `src/components/PostOutput/PostOutput.module.css` | Textarea + botão glassmorphism |
+| `src/components/History/History.module.css` | Card e lista glassmorphism |
 
 ## O que NÃO fazer
 
-- Não remover o login com Google — continua funcionando
-- Não remover o login com email/senha — continua funcionando
-- Não alterar o backend
-- Não alterar o banco de dados
-- Não desativar o provider GitHub no Supabase Dashboard (decisão do usuário, fora do código)
+- Não alterar lógica de nenhum componente — apenas CSS
+- Não alterar estrutura HTML/JSX dos componentes (exceto inline styles do Login.jsx)
+- Não usar JavaScript para animações — tudo em CSS puro
+- Não alterar z-index do `CloudBackground` (já está correto em `z-index: 0`)
+- Não adicionar novas dependências
 
 ## Critérios de aceite
 
-- [ ] O botão "Entrar com GitHub" não aparece mais na tela de login
-- [ ] Login com Google continua funcionando (sem regressão)
-- [ ] Login com email/senha continua funcionando (sem regressão)
-- [ ] Nenhum `console.log` de debug permanece nos 3 arquivos
-- [ ] Nenhum erro de prop undefined ou referência quebrada no console
+- [ ] Na tela de login: nuvens brancas visíveis se movendo sobre o fundo azul escuro
+- [ ] Card de login com efeito de vidro fosco (backdrop-filter: blur visível)
+- [ ] Botão "Entrar com Google" com estilo glassmorphism (sem cor sólida azul)
+- [ ] Na tela principal: header com glassmorphism, colunas com card translúcido
+- [ ] Botão "Gerar Post" com glassmorphism
+- [ ] Textareas com borda sutil e leve transparência
+- [ ] Nuvens visíveis através dos cards (efeito backdrop-filter funcionando)
+- [ ] Layout responsivo preservado (desktop 2 colunas / mobile 1 coluna)
+- [ ] Legibilidade do texto preservada (contraste adequado sobre vidro)
 
 ## Dependências e riscos
 
-- Risco zero — remoção pura, sem lógica nova
-- O provider GitHub no Supabase Dashboard pode ser desativado manualmente após a mudança (opcional)
+- `backdrop-filter: blur()` não funciona no Firefox com suporte parcial — adicionar prefixo `-webkit-backdrop-filter` para Safari/Chrome. Firefox suporta desde v103, aceitável.
+- Se as nuvens estiverem muito rápidas após o ajuste, revisar `animation-duration` individualmente.
+- Contraste: glassmorphism pode reduzir legibilidade. Manter `color: var(--color-text)` (#e8f4fd) em todos os textos sobre vidro.
+- O efeito `backdrop-filter` só funciona se o elemento glassmorphism NÃO tiver `background` opaco — verificar que nenhum background sólido sobrescreve o CSS.
