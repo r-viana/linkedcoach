@@ -64,16 +64,16 @@ Construir o MVP completo do LinkedCoach do zero: setup do projeto, banco de dado
 
 ### Frontend — Estilos
 
-- [ ] 27. Criar `src/styles/global.css` — `@import` Google Fonts (Nunito + Bebas Neue), variáveis CSS da paleta conforme CLAUDE.md seção 7, reset básico, estilos de tipografia globais → `src/styles/global.css`
-- [ ] 28. Criar `src/styles/clouds.css` — 6 nuvens em CSS puro (elipses + border-radius), `@keyframes` de translação horizontal, ciclos de 60s a 120s, opacity 0.10–0.25 → `src/styles/clouds.css`
+- [x] 27. Criar `src/styles/global.css` — `@import` Google Fonts (Nunito + Bebas Neue), variáveis CSS da paleta conforme CLAUDE.md seção 7, reset básico, estilos de tipografia globais → `src/styles/global.css`
+- [x] 28. Criar `src/styles/clouds.css` — 6 nuvens em CSS puro (elipses + border-radius), `@keyframes` de translação horizontal, ciclos de 60s a 120s, opacity 0.10–0.25 → `src/styles/clouds.css`
 
 ### Frontend — Componentes
 
-- [ ] 29. Criar `CloudBackground` — div com as 6 nuvens CSS, posicionamento `fixed` cobrindo tela inteira, `z-index: 0`, `pointer-events: none` → `src/components/CloudBackground/CloudBackground.jsx` + `CloudBackground.module.css`
-- [ ] 30. Criar `AuthButtons` — 3 modos: botão Google OAuth, botão GitHub OAuth, form email/senha (input + botão); exibe erro de autenticação abaixo → `src/components/AuthButtons/AuthButtons.jsx` + `AuthButtons.module.css`
-- [ ] 31. Criar `PostForm` — textarea para frase (sem limite), textarea para tom (max 140 chars com contador), botão "Gerar Post", estado de loading com spinner/texto → `src/components/PostForm/PostForm.jsx` + `PostForm.module.css`
-- [ ] 32. Criar `PostOutput` — textarea editável com o post gerado (ou placeholder quando vazio), botão "Copiar" com feedback visual (texto muda para "Copiado!" por 2s) via `navigator.clipboard.writeText` → `src/components/PostOutput/PostOutput.jsx` + `PostOutput.module.css`
-- [ ] 33. Criar `History` — lista scrollável vertical dos últimos 20 posts (exibir primeiros 60 chars do `input_phrase`), clique carrega post no output via `selectPost` do hook → `src/components/History/History.jsx` + `History.module.css`
+- [x] 29. Criar `CloudBackground` — div com as 6 nuvens CSS, posicionamento `fixed` cobrindo tela inteira, `z-index: 0`, `pointer-events: none` → `src/components/CloudBackground/CloudBackground.jsx` + `CloudBackground.module.css`
+- [x] 30. Criar `AuthButtons` — 3 modos: botão Google OAuth, botão GitHub OAuth, form email/senha (input + botão); exibe erro de autenticação abaixo → `src/components/AuthButtons/AuthButtons.jsx` + `AuthButtons.module.css`
+- [x] 31. Criar `PostForm` — textarea para frase (sem limite), textarea para tom (max 140 chars com contador), botão "Gerar Post", estado de loading com spinner/texto → `src/components/PostForm/PostForm.jsx` + `PostForm.module.css`
+- [x] 32. Criar `PostOutput` — textarea editável com o post gerado (ou placeholder quando vazio), botão "Copiar" com feedback visual (texto muda para "Copiado!" por 2s) via `navigator.clipboard.writeText` → `src/components/PostOutput/PostOutput.jsx` + `PostOutput.module.css`
+- [x] 33. Criar `History` — lista scrollável vertical dos últimos 20 posts (exibir primeiros 60 chars do `input_phrase`), clique carrega post no output via `selectPost` do hook → `src/components/History/History.jsx` + `History.module.css`
 
 ### Frontend — Páginas e Roteamento
 
