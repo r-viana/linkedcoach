@@ -23,14 +23,14 @@ Construir o MVP completo do LinkedCoach do zero: setup do projeto, banco de dado
 
 ### Setup & Configuração do Projeto
 
-- [ ] 1. Inicializar projeto com `npm create vite@latest . -- --template react` → raiz do projeto
-- [ ] 2. Instalar dependências: `@supabase/supabase-js`, `react-router-dom`; instalar devDependency: `vercel` (`npm i -D vercel`) → `package.json`; adicionar script `"dev": "vercel dev"` ao `package.json` — **não usar `npm run dev` do Vite para testar API routes; sempre usar `vercel dev`**
-- [ ] 3. Criar `vite.config.js` com configuração de build padrão (sem proxy — o `vercel dev` resolve `/api` automaticamente) → `vite.config.js`
-- [ ] 3a. Executar `vercel login` e `vercel link` para vincular o projeto local ao Vercel antes de rodar `vercel dev` → terminal
-- [ ] 4. Criar `vercel.json` com rewrites das API routes e configuração de build → `vercel.json`
-- [ ] 5. Criar `.env.example` com todas as variáveis necessárias → `.env.example`
-- [ ] 6. Criar `.gitignore` incluindo `.env.local`, `node_modules`, `dist` → `.gitignore`
-- [ ] 7. Inicializar repositório git, adicionar remote e fazer primeiro commit → terminal
+- [x] 1. Inicializar projeto com `npm create vite@latest . -- --template react` → raiz do projeto
+- [x] 2. Instalar dependências: `@supabase/supabase-js`, `react-router-dom`; instalar devDependency: `vercel` (`npm i -D vercel`) → `package.json`; adicionar script `"dev": "vercel dev"` ao `package.json` — **não usar `npm run dev` do Vite para testar API routes; sempre usar `vercel dev`**
+- [x] 3. Criar `vite.config.js` com configuração de build padrão (sem proxy — o `vercel dev` resolve `/api` automaticamente) → `vite.config.js`
+- [ ] 3a. Executar `vercel login` e `vercel link` para vincular o projeto local ao Vercel antes de rodar `vercel dev` → terminal ⚠️ AÇÃO MANUAL DO USUÁRIO
+- [x] 4. Criar `vercel.json` com rewrites das API routes e configuração de build → `vercel.json`
+- [x] 5. Criar `.env.example` com todas as variáveis necessárias → `.env.example`
+- [x] 6. Criar `.gitignore` incluindo `.env.local`, `node_modules`, `dist` → `.gitignore`
+- [x] 7. Inicializar repositório git, adicionar remote e fazer primeiro commit → terminal
 
 ### Banco (Supabase — passos manuais + SQL)
 
@@ -45,16 +45,16 @@ Construir o MVP completo do LinkedCoach do zero: setup do projeto, banco de dado
 
 ### Backend
 
-- [ ] 14. Criar `api/generate.js` com estrutura base: receber POST, extrair **apenas** `{ phrase, tone }` do body — **nunca confiar em `userId` vindo do body**, mesmo que o cliente o envie → `api/generate.js`
-- [ ] 15. Implementar autenticação JWT: extrair token do header `Authorization: Bearer <token>`, verificar via `supabase.auth.getUser(token)` com a service_role key para obter `userId` autenticado — **este é o único `userId` válido; ignorar qualquer userId no body** → `api/generate.js`
-- [ ] 16. Implementar sanitização de inputs: remover caracteres de controle de `phrase` e `tone` antes de montar prompt → `api/generate.js`
-- [ ] 17. Implementar rate limiting em memória: `Map<userId, { count, windowStart }>`, máx 10 req/min por usuário → `api/generate.js`
-- [ ] 18. Implementar montagem do prompt conforme CLAUDE.md seção 8, interpolando `{tone}` e `{phrase}` → `api/generate.js`
-- [ ] 19. Implementar chamada à **Groq API** (modelo `llama3-8b-8192`) com timeout de 10s → `api/generate.js`
-- [ ] 20. Implementar fallback para **Gemini API** (`gemini-1.5-flash`) se Groq falhar → `api/generate.js`
-- [ ] 21. Implementar fallback para **HuggingFace Inference API** — usar modelo leve (`google/flan-t5-base` ou `HuggingFaceH4/zephyr-7b-beta` via Inference API) com timeout de **8s** (o Vercel free tier limita funções serverless a **10s** no total; Groq + Gemini já consomem até 10s em cascata — priorizar Groq e Gemini; HuggingFace é último recurso e pode expirar) → `api/generate.js`
-- [ ] 22. Implementar persistência no Supabase: salvar post gerado; se count >= 20, deletar o mais antigo primeiro → `api/generate.js`
-- [ ] 23. Padronizar respostas: `{ post }` em sucesso, `{ error: "Não foi possível gerar o post." }` em falha (nunca expor qual API falhou) → `api/generate.js`
+- [x] 14. Criar `api/generate.js` com estrutura base: receber POST, extrair **apenas** `{ phrase, tone }` do body — **nunca confiar em `userId` vindo do body**, mesmo que o cliente o envie → `api/generate.js`
+- [x] 15. Implementar autenticação JWT: extrair token do header `Authorization: Bearer <token>`, verificar via `supabase.auth.getUser(token)` com a service_role key para obter `userId` autenticado — **este é o único `userId` válido; ignorar qualquer userId no body** → `api/generate.js`
+- [x] 16. Implementar sanitização de inputs: remover caracteres de controle de `phrase` e `tone` antes de montar prompt → `api/generate.js`
+- [x] 17. Implementar rate limiting em memória: `Map<userId, { count, windowStart }>`, máx 10 req/min por usuário → `api/generate.js`
+- [x] 18. Implementar montagem do prompt conforme CLAUDE.md seção 8, interpolando `{tone}` e `{phrase}` → `api/generate.js`
+- [x] 19. Implementar chamada à **Groq API** (modelo `llama3-8b-8192`) com timeout de 5s → `api/generate.js`
+- [x] 20. Implementar fallback para **Gemini API** (`gemini-1.5-flash`, timeout 4s) se Groq falhar → `api/generate.js`
+- [x] 21. Implementar fallback para **HuggingFace Inference API** — modelo `google/flan-t5-base`, timeout 8s → `api/generate.js`
+- [x] 22. Implementar persistência no Supabase: salvar post gerado; se count >= 20, deletar o mais antigo primeiro → `api/generate.js`
+- [x] 23. Padronizar respostas: `{ post }` em sucesso, `{ error: "Não foi possível gerar o post." }` em falha (nunca expor qual API falhou) → `api/generate.js`
 
 ### Frontend — Infraestrutura
 
