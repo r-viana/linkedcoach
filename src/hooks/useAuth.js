@@ -17,7 +17,8 @@ export function useAuth() {
     })
 
     // Escuta mudanças de autenticação (login, logout, refresh de token)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('[useAuth] onAuthStateChange:', event, { autenticado: !!session })
       setSession(session)
       setLoading(false)
     })
@@ -38,19 +39,33 @@ export function useAuth() {
   }
 
   async function signInWithGoogle() {
-    const { error } = await supabase.auth.signInWithOAuth({
+    console.log('[useAuth] signInWithGoogle iniciado, redirectTo:', window.location.origin)
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo: window.location.origin },
     })
-    return { error }
+    console.log('[useAuth] signInWithOAuth Google resultado:', { url: data?.url, error: error?.message })
+    if (error) return { error }
+    if (data?.url) {
+      console.log('[useAuth] redirect manual Google para:', data.url)
+      window.location.href = data.url
+    }
+    return { error: null }
   }
 
   async function signInWithGitHub() {
-    const { error } = await supabase.auth.signInWithOAuth({
+    console.log('[useAuth] signInWithGitHub iniciado, redirectTo:', window.location.origin)
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
       options: { redirectTo: window.location.origin },
     })
-    return { error }
+    console.log('[useAuth] signInWithOAuth GitHub resultado:', { url: data?.url, error: error?.message })
+    if (error) return { error }
+    if (data?.url) {
+      console.log('[useAuth] redirect manual GitHub para:', data.url)
+      window.location.href = data.url
+    }
+    return { error: null }
   }
 
   async function signOut() {

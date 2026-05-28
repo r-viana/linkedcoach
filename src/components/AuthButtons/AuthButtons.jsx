@@ -26,7 +26,7 @@ export default function AuthButtons({
       <button
         type="button"
         className={styles.socialButton}
-        onClick={onSignInWithGoogle}
+        onClick={() => { console.log('[AuthButtons] clique Google'); onSignInWithGoogle() }}
       >
         Entrar com Google
       </button>
@@ -34,7 +34,7 @@ export default function AuthButtons({
       <button
         type="button"
         className={styles.socialButton}
-        onClick={onSignInWithGitHub}
+        onClick={() => { console.log('[AuthButtons] clique GitHub'); onSignInWithGitHub() }}
       >
         Entrar com GitHub
       </button>
