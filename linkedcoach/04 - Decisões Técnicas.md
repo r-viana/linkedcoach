@@ -68,3 +68,17 @@ tags: [decisões, arquitetura, adr]
 **Decisão:** Nunito para corpo de texto; Bebas Neue para títulos e logo.  
 **Por quê:** Nunito é amigável e arredondada (combina com o tom descontraído); Bebas Neue é impactante e dramática (reforça a sátira).  
 **Trade-off:** duas fontes Google adicionais no bundle (impacto mínimo).
+
+---
+
+## Fluxo de cadastro: modo explícito em AuthButtons (2026-05-29)
+**Decisão:** substituir os dois botões side-by-side ("Entrar" + "Cadastrar") por um estado `mode` ('login' | 'signup') dentro de `AuthButtons`, com um único botão primário por modo e link de troca de modo.  
+**Por quê:** o layout anterior era ambíguo — o usuário não sabia se estava logando ou cadastrando. A separação em modos torna a intenção explícita.  
+**Trade-off:** `AuthButtons` ganha responsabilidade de estado de modo; tradeoff aceitável — o componente já gerenciava email/senha internamente. Não há impacto na interface com `Login.jsx` (mesmas props).
+
+---
+
+## Loading local em AuthButtons, não em Login.jsx (2026-05-29)
+**Decisão:** o estado `isLoading` (durante chamadas de signIn/signUp) é gerenciado dentro de `AuthButtons`, não propagado para cima via prop ou contexto.  
+**Por quê:** é responsabilidade de UI local — o formulário é quem deve se desabilitar durante a submissão. `Login.jsx` não precisa saber que uma chamada está em andamento.  
+**Trade-off:** nenhum — `Login.jsx` já recebe apenas callbacks; manter `isLoading` dentro de `AuthButtons` é o padrão correto para este caso.

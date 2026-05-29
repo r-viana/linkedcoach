@@ -65,6 +65,18 @@ Ver: [[05 - Banco de Dados]]
 
 ---
 
+## ⚠️ Identificados na revisão de UX de Cadastro (2026-05-29)
+
+### Elemento de troca de modo sem `disabled` nativo (acessibilidade teclado)
+**Problema:** se `modeToggle` for implementado como `<span>` ou `<a>` com `pointer-events: none` via CSS, usuário de teclado pode trocar de modo durante `isLoading` (Tab + Enter não é bloqueado por CSS).  
+**Mitigação:** usar `<button type="button" disabled>` com aparência de link via CSS. Atributo `disabled` nativo bloqueia mouse e teclado.
+
+### Campos não limpos ao trocar de modo (UX + autoComplete)
+**Problema:** trocar de modo login → signup sem limpar o campo senha deixa senha antiga visível e pode causar comportamento estranho no `autoComplete` do browser quando o atributo muda de `current-password` para `new-password`.  
+**Mitigação:** chamar `setPassword('')` ao mudar de modo via `setMode`.
+
+---
+
 ## ❓ Perguntas Ainda Abertas
 
 - O repositório `r-viana/linkedcoach` já existe no GitHub ou precisa ser criado?
