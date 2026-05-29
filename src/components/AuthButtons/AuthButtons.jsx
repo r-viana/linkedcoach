@@ -9,15 +9,35 @@ export default function AuthButtons({
 }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [mode, setMode] = useState('login')
+  const [isLoading, setIsLoading] = useState(false)
 
-  function handleSubmitSignIn(e) {
-    e.preventDefault()
-    onSignInWithEmail(email, password)
+  function handleModeSwitch(novoModo) {
+    setMode(novoModo)
+    setPassword('')
   }
 
-  function handleSignUp(e) {
+  async function handleFormSubmit(e) {
     e.preventDefault()
-    onSignUpWithEmail(email, password)
+    setIsLoading(true)
+    try {
+      if (mode === 'login') {
+        await onSignInWithEmail(email, password)
+      } else {
+        await onSignUpWithEmail(email, password)
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  async function handleGoogle() {
+    setIsLoading(true)
+    try {
+      await onSignInWithGoogle()
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -25,7 +45,8 @@ export default function AuthButtons({
       <button
         type="button"
         className={styles.socialButton}
-        onClick={onSignInWithGoogle}
+        onClick={handleGoogle}
+        disabled={isLoading}
       >
         Entrar com Google
       </button>
@@ -34,7 +55,7 @@ export default function AuthButtons({
         <span>ou</span>
       </div>
 
-      <form className={styles.form} onSubmit={handleSubmitSignIn}>
+      <form className={styles.form} onSubmit={handleFormSubmit}>
         <div className={styles.field}>
           <label htmlFor="email" className={styles.label}>
             E-mail
@@ -46,6 +67,7 @@ export default function AuthButtons({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
+            disabled={isLoading}
           />
         </div>
 
@@ -59,22 +81,33 @@ export default function AuthButtons({
             className={styles.input}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
+            autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+            disabled={isLoading}
           />
         </div>
 
+        {mode === 'signup' && (
+          <p className={styles.hint}>
+            Após o cadastro, você receberá um e-mail de confirmação. Clique no link para ativar sua conta.
+          </p>
+        )}
+
         <div className={styles.actions}>
-          <button type="submit" className={styles.button}>
-            Entrar
-          </button>
-          <button
-            type="button"
-            className={styles.buttonOutline}
-            onClick={handleSignUp}
-          >
-            Cadastrar
+          <button type="submit" className={styles.button} disabled={isLoading}>
+            {mode === 'login'
+              ? (isLoading ? 'Entrando...' : 'Entrar')
+              : (isLoading ? 'Cadastrando...' : 'Cadastrar')}
           </button>
         </div>
+
+        <button
+          type="button"
+          className={styles.modeToggle}
+          disabled={isLoading}
+          onClick={() => handleModeSwitch(mode === 'login' ? 'signup' : 'login')}
+        >
+          {mode === 'login' ? 'Não tem conta? Cadastrar-se' : 'Já tem conta? Entrar'}
+        </button>
       </form>
 
       {error && <p className={styles.error}>{error}</p>}
